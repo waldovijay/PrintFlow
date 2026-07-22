@@ -1,12 +1,16 @@
-from fastapi import FastAPI
-from app.database import create_db
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
 
-app = FastAPI(title="PrintFlow")
+app = FastAPI()
 
-@app.on_event("startup")
-def startup():
-    create_db()
+templates = Jinja2Templates(directory="app/templates")
 
 @app.get("/")
-def home():
-    return {"application":"PrintFlow","version":"0.1"}
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="dashboard.html",
+        context={
+            "title": "Dashboard"
+        }
+    )
