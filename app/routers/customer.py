@@ -1,7 +1,19 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
+from fastapi.templating import Jinja2Templates
 
-router=APIRouter(prefix="/customers",tags=["Customers"])
+router = APIRouter(prefix="/customers", tags=["Customers"])
+
+templates = Jinja2Templates(directory="app/templates")
+
 
 @router.get("/")
-def list_customers():
-    return {"message":"Customer module ready"}
+def customer_list(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="customer/list.html",
+        context={
+            "request": request,
+            "title": "Customers",
+            "customers": [],
+        },
+    )
