@@ -20,9 +20,9 @@ def startup():
 def dashboard(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="dashboard.html",
+        name="dashboard/index.html",
         context={
             "request": request,
-            "title": "Dashboard"
-        }
+            "title": "Dashboard",
+        },
     )
