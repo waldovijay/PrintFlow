@@ -5,10 +5,35 @@ from app.services.sequence_service import SequenceService
 
 
 class CustomerService:
+
+    @staticmethod
+    def update(
+        session: Session,
+        customer_id: int,
+        company_name: str,
+        contact_person: str,
+        mobile: str,
+        gst_number: str,
+    ):
+        customer = CustomerService.get_by_id(session, customer_id)
+
+        if not customer:
+            return None
+
+        customer.company_name = company_name
+        customer.contact_person = contact_person
+        customer.mobile = mobile
+        customer.gst_number = gst_number
+
+        session.add(customer)
+        session.commit()
+        session.refresh(customer)
+
+        return customer
+
     @staticmethod
     def get_by_id(session: Session, customer_id: int):
-
-    	return session.get(Customer, customer_id)
+        return session.get(Customer, customer_id)
 
     @staticmethod
     def get_all(session: Session):

@@ -79,3 +79,25 @@ def create_customer(
         url="/customers/",
         status_code=303,
     )
+@router.post("/{customer_id}/update")
+def update_customer(
+    customer_id: int,
+    company_name: str = Form(...),
+    contact_person: str = Form(""),
+    mobile: str = Form(""),
+    gst_number: str = Form(""),
+    session: Session = Depends(get_session),
+):
+    CustomerService.update(
+        session=session,
+        customer_id=customer_id,
+        company_name=company_name,
+        contact_person=contact_person,
+        mobile=mobile,
+        gst_number=gst_number,
+    )
+
+    return RedirectResponse(
+        url="/customers/",
+        status_code=303,
+    )
