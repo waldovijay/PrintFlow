@@ -11,7 +11,27 @@ router = APIRouter(prefix="/customers", tags=["Customers"])
 
 templates = Jinja2Templates(directory="app/templates")
 
+@router.get("/{customer_id}/edit")
+def edit_customer(
+    customer_id: int,
+    request: Request,
+    session: Session = Depends(get_session),
+):
+    customer = CustomerService.get_by_id(
+        session,
+        customer_id,
+    )
 
+    return templates.TemplateResponse(
+        request=request,
+        name="customer/form.html",
+        context={
+            "request": request,
+            "title": "Edit Customer",
+            "customer": customer,
+            "is_edit": True,
+        },
+    )
 @router.get("/")
 def customer_list(
     request: Request,

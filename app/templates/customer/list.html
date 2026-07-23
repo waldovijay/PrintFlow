@@ -11,15 +11,16 @@
 </div>
 
 <table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>Code</th>
-            <th>Company</th>
-            <th>Contact</th>
-            <th>Mobile</th>
-            <th>Status</th>
-        </tr>
-    </thead>
+    	<thead>
+		<tr>
+    			<th>Code</th>
+    			<th>Company</th>
+    			<th>Contact</th>
+   			<th>Mobile</th>
+    			<th>GST</th>
+    			<th>Action</th>
+		</tr>
+	</thead>
 
     <tbody>
 
@@ -30,7 +31,14 @@
             <td>{{ customer.company_name }}</td>
             <td>{{ customer.contact_person }}</td>
             <td>{{ customer.mobile }}</td>
+            <td>{{ customer.gst_number }}</td>
             <td>
+    <a href="/customers/{{ customer.id }}/edit"
+       class="btn btn-sm btn-primary">
+        Edit
+    </a>
+            </td>
+	     <td>
                 {% if customer.active %}
                     Active
                 {% else %}

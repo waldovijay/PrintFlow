@@ -5,6 +5,10 @@ from app.services.sequence_service import SequenceService
 
 
 class CustomerService:
+    @staticmethod
+    def get_by_id(session: Session, customer_id: int):
+
+    	return session.get(Customer, customer_id)
 
     @staticmethod
     def get_all(session: Session):
