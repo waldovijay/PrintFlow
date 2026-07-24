@@ -5,6 +5,7 @@ from sqlmodel import Session
 
 from app.database.session import get_session
 from app.services.item_service import ItemService
+from app.services.category_service import CategoryService
 
 router = APIRouter(prefix="/items", tags=["Items"])
 
@@ -30,13 +31,20 @@ def item_list(
 
 
 @router.get("/new")
-def new_item(request: Request):
+def new_item(
+    request: Request,
+    session: Session = Depends(get_session),
+):
+
+    categories = CategoryService.get_dropdown(session)
+
     return templates.TemplateResponse(
         request=request,
         name="item/form.html",
         context={
             "request": request,
             "title": "Add Item",
+            "categories": categories,
         },
     )
 
@@ -83,6 +91,7 @@ def edit_item(
     session: Session = Depends(get_session),
 ):
     item = ItemService.get_by_id(session, item_id)
+    categories = CategoryService.get_dropdown(session)
 
     return templates.TemplateResponse(
         request=request,
@@ -91,6 +100,7 @@ def edit_item(
             "request": request,
             "title": "Edit Item",
             "item": item,
+            "categories": categories,
             "is_edit": True,
         },
     )
