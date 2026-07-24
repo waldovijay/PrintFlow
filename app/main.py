@@ -4,12 +4,14 @@ from fastapi.templating import Jinja2Templates
 from app.models.document_sequence import DocumentSequence
 from app.database.engine import create_db_and_tables
 from app.routers.customer import router as customer_router
+from app.routers.item import router as item_router
 
 # Create FastAPI app first
 app = FastAPI(title="PrintFlow ERP")
 
 # Register routers
 app.include_router(customer_router)
+app.include_router(item_router)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")

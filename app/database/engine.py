@@ -2,6 +2,7 @@ from sqlmodel import SQLModel, create_engine
 
 # Import all models here
 from app.models.customer import Customer
+from app.models.item import Item
 
 DATABASE_URL = "sqlite:///data/printflow.db"
 
