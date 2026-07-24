@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session
-
+from app.services.unit_service import UnitService
 from app.database.session import get_session
 from app.services.item_service import ItemService
 from app.services.category_service import CategoryService
@@ -37,7 +37,7 @@ def new_item(
 ):
 
     categories = CategoryService.get_dropdown(session)
-
+    units = UnitService.get_dropdown(session)
     return templates.TemplateResponse(
         request=request,
         name="item/form.html",
@@ -45,6 +45,7 @@ def new_item(
             "request": request,
             "title": "Add Item",
             "categories": categories,
+            "units": units,
         },
     )
 
@@ -83,7 +84,6 @@ def create_item(
         status_code=303,
     )
 
-
 @router.get("/{item_id}/edit")
 def edit_item(
     item_id: int,
@@ -91,7 +91,9 @@ def edit_item(
     session: Session = Depends(get_session),
 ):
     item = ItemService.get_by_id(session, item_id)
+
     categories = CategoryService.get_dropdown(session)
+    units = UnitService.get_dropdown(session)
 
     return templates.TemplateResponse(
         request=request,
@@ -101,6 +103,7 @@ def edit_item(
             "title": "Edit Item",
             "item": item,
             "categories": categories,
+            "units": units,
             "is_edit": True,
         },
     )

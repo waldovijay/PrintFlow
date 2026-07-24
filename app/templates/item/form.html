@@ -5,6 +5,7 @@
 <div class="container-fluid">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
+
         <h3>
             {% if item %}
                 Edit Item
@@ -16,12 +17,18 @@
         <a href="/items/" class="btn btn-secondary">
             Back
         </a>
+
     </div>
 
     <form method="post"
           action="{% if item %}/items/{{ item.id }}/update{% else %}/items/create{% endif %}">
 
+        <!-- ========================= -->
+        <!-- General Information -->
+        <!-- ========================= -->
+
         <div class="card mb-3">
+
             <div class="card-header">
                 <strong>General Information</strong>
             </div>
@@ -31,7 +38,10 @@
                 <div class="row">
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Item Name</label>
+
+                        <label class="form-label">
+                            Item Name
+                        </label>
 
                         <input
                             type="text"
@@ -39,39 +49,58 @@
                             name="item_name"
                             value="{{ item.item_name if item else '' }}"
                             required>
+
                     </div>
 
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">Item Type</label>
 
-                        <select class="form-select" name="item_type">
+                        <label class="form-label">
+                            Item Type
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="item_type">
 
                             <option value="Product"
-                                {% if item and item.item_type=="Product" %}selected{% endif %}>
+                                {% if item and item.item_type=="Product" %}
+                                    selected
+                                {% endif %}>
                                 Product
                             </option>
 
                             <option value="Service"
-                                {% if item and item.item_type=="Service" %}selected{% endif %}>
+                                {% if item and item.item_type=="Service" %}
+                                    selected
+                                {% endif %}>
                                 Service
                             </option>
 
                         </select>
+
                     </div>
 
                     <div class="col-md-3 mb-3">
 
-                        <label class="form-label">Inventory Managed</label>
+                        <label class="form-label">
+                            Inventory Managed
+                        </label>
 
-                        <select class="form-select" name="inventory_managed">
+                        <select
+                            class="form-select"
+                            name="inventory_managed">
 
                             <option value="true"
-                                {% if not item or item.inventory_managed %}selected{% endif %}>
+                                {% if not item or item.inventory_managed %}
+                                    selected
+                                {% endif %}>
                                 Yes
                             </option>
 
                             <option value="false"
-                                {% if item and not item.inventory_managed %}selected{% endif %}>
+                                {% if item and not item.inventory_managed %}
+                                    selected
+                                {% endif %}>
                                 No
                             </option>
 
@@ -82,7 +111,12 @@
                 </div>
 
             </div>
+
         </div>
+
+        <!-- ========================= -->
+        <!-- Classification -->
+        <!-- ========================= -->
 
         <div class="card mb-3">
 
@@ -94,66 +128,107 @@
 
                 <div class="row">
 
+                    <!-- Category -->
+
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">Category</label>
-                       <div class="mb-3">
-    <label class="form-label">Category</label>
 
-    <select
-       <div class="col-md-3 mb-3">
+                        <label class="form-label">
+                            Category
+                        </label>
 
-    <label class="form-label">Category</label>
+                        <select
+                            class="form-select"
+                            name="category">
 
-    <select
-        class="form-select"
-        name="category"
-    >
+                            <option value="">
+                                Select Category
+                            </option>
 
-        <option value="">Select Category</option>
+                            {% for category in categories %}
 
-        {% for category in categories %}
+                            <option
+                                value="{{ category.category_name }}"
+                                {% if item and item.category == category.category_name %}
+                                    selected
+                                {% endif %}
+                            >
 
-        <option
-            value="{{ category.category_name }}"
-            {% if item and item.category == category.category_name %}
-                selected
-            {% endif %}
-        >
-            {{ category.category_name }}
-        </option>
+                                {{ category.category_name }}
 
-        {% endfor %}
+                            </option>
 
-    </select>
+                            {% endfor %}
 
-</div>
-    </select>
-</div>
+                        </select>
+
                     </div>
 
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Unit</label>
-                        <input type="text"
-                               class="form-control"
-                               name="unit"
-                               value="{{ item.unit if item else '' }}">
-                    </div>
+                    <!-- Unit -->
 
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">HSN / SAC</label>
-                        <input type="text"
-                               class="form-control"
-                               name="hsn_sac"
-                               value="{{ item.hsn_sac if item else '' }}">
+
+                        <label class="form-label">
+                            Unit
+                        </label>
+
+                        <select
+                            class="form-select"
+                            name="unit">
+
+                            <option value="">
+                                Select Unit
+                            </option>
+
+                            {% for unit in units %}
+
+                            <option
+                                value="{{ unit.short_name }}"
+                                {% if item and item.unit == unit.short_name %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ unit.unit_name }} ({{ unit.short_name }})
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
                     </div>
 
+                    <!-- HSN -->
+
                     <div class="col-md-3 mb-3">
-                        <label class="form-label">GST %</label>
-                        <input type="number"
-                               step="0.01"
-                               class="form-control"
-                               name="gst_percent"
-                               value="{{ item.gst_percent if item else 0 }}">
+
+                        <label class="form-label">
+                            HSN / SAC
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="hsn_sac"
+                            value="{{ item.hsn_sac if item else '' }}">
+
+                    </div>
+
+                    <!-- GST -->
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label">
+                            GST %
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            class="form-control"
+                            name="gst_percent"
+                            value="{{ item.gst_percent if item else 0 }}">
+
                     </div>
 
                 </div>
@@ -161,6 +236,10 @@
             </div>
 
         </div>
+
+        <!-- ========================= -->
+        <!-- Pricing -->
+        <!-- ========================= -->
 
         <div class="card mb-3">
 
@@ -173,23 +252,33 @@
                 <div class="row">
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Cost Price</label>
 
-                        <input type="number"
-                               step="0.01"
-                               class="form-control"
-                               name="cost_price"
-                               value="{{ item.cost_price if item else 0 }}">
+                        <label class="form-label">
+                            Cost Price
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            class="form-control"
+                            name="cost_price"
+                            value="{{ item.cost_price if item else 0 }}">
+
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Selling Price</label>
 
-                        <input type="number"
-                               step="0.01"
-                               class="form-control"
-                               name="selling_price"
-                               value="{{ item.selling_price if item else 0 }}">
+                        <label class="form-label">
+                            Selling Price
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            class="form-control"
+                            name="selling_price"
+                            value="{{ item.selling_price if item else 0 }}">
+
                     </div>
 
                 </div>
@@ -197,6 +286,10 @@
             </div>
 
         </div>
+
+        <!-- ========================= -->
+        <!-- Description -->
+        <!-- ========================= -->
 
         <div class="card mb-4">
 
@@ -216,15 +309,19 @@
         </div>
 
         <button class="btn btn-primary">
+
             {% if item %}
                 Update Item
             {% else %}
                 Save Item
             {% endif %}
+
         </button>
 
         <a href="/items/" class="btn btn-secondary">
+
             Cancel
+
         </a>
 
     </form>
