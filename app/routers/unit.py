@@ -28,7 +28,6 @@ def unit_list(
         },
     )
 
-
 @router.get("/new")
 def new_unit(request: Request):
     return templates.TemplateResponse(
@@ -77,6 +76,7 @@ def edit_unit(
             "request": request,
             "title": "Edit Unit",
             "unit": unit,
+            "is_edit": True,
         },
     )
 

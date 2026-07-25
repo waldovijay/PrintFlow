@@ -6,11 +6,12 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <h3>Unit Master</h3>
+        {% set page_title = "Unit Master" %}
+	{% set page_subtitle = "Manage measurement units" %}
+	{% set add_url = "/units/new" %}
+	{% set back_url = "/" %}
 
-        <a href="/units/new" class="btn btn-primary">
-            + Add Unit
-        </a>
+	{% include "components/page_header.html" %}
 
     </div>
 
