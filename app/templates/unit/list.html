@@ -8,10 +8,13 @@
 
         {% set page_title = "Unit Master" %}
 	{% set page_subtitle = "Manage measurement units" %}
-	{% set add_url = "/units/new" %}
 	{% set back_url = "/" %}
 
 	{% include "components/page_header.html" %}
+	
+	{% set add_url = "/units/new" %}
+
+	{% include "components/search_toolbar.html" %}
 
     </div>
 

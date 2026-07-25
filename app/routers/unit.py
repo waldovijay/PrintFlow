@@ -14,9 +14,20 @@ templates = Jinja2Templates(directory="app/templates")
 @router.get("/")
 def unit_list(
     request: Request,
+    search: str = "",
     session: Session = Depends(get_session),
 ):
     units = UnitService.get_all(session)
+
+    if search:
+        search_text = search.lower()
+
+        units = [
+            u for u in units
+            if search_text in u.unit_name.lower()
+            or search_text in u.short_name.lower()
+            or search_text in (u.description or "").lower()
+        ]
 
     return templates.TemplateResponse(
         request=request,
@@ -25,6 +36,7 @@ def unit_list(
             "request": request,
             "title": "Unit Master",
             "units": units,
+            "search": search,
         },
     )
 
