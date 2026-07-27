@@ -8,6 +8,7 @@ from app.routers.item import router as item_router
 from app.routers.category import router as category_router
 from app.routers.unit import router as unit_router
 from app.routers import brand
+from app.routers.dashboard import router as dashboard_router
 
 # Create FastAPI app first
 app = FastAPI(title="PrintFlow ERP")
@@ -15,9 +16,14 @@ app = FastAPI(title="PrintFlow ERP")
 # Register routers
 app.include_router(customer_router)
 app.include_router(item_router)
-app.include_router(category_router)
 app.include_router(unit_router)
 app.include_router(brand.router)
+app.include_router(dashboard_router)
+app.include_router(
+    category_router,
+    prefix="/categories",
+    tags=["Categories"],
+)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")

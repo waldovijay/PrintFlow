@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, Form
+from fastapi import APIRouter, Request, Depends, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session
@@ -6,13 +6,13 @@ from sqlmodel import Session
 from app.database.session import get_session
 from app.services.category_service import CategoryService
 
-router = APIRouter(prefix="/categories", tags=["Categories"])
+router = APIRouter()
 
 templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/")
-def category_list(
+def list_categories(
     request: Request,
     session: Session = Depends(get_session),
 ):
@@ -23,8 +23,8 @@ def category_list(
         name="category/list.html",
         context={
             "request": request,
-            "title": "Category Master",
             "categories": categories,
+            "title": "Category Master",
         },
     )
 
@@ -37,6 +37,7 @@ def new_category(request: Request):
         context={
             "request": request,
             "title": "Add Category",
+            "category": None,
         },
     )
 
@@ -55,7 +56,7 @@ def create_category(
 
     return RedirectResponse(
         url="/categories/",
-        status_code=303,
+        status_code=status.HTTP_303_SEE_OTHER,
     )
 
 
@@ -65,10 +66,13 @@ def edit_category(
     request: Request,
     session: Session = Depends(get_session),
 ):
-    category = CategoryService.get_by_id(
-        session,
-        category_id,
-    )
+    category = CategoryService.get_by_id(session, category_id)
+
+    if not category:
+        return RedirectResponse(
+            url="/categories/",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
 
     return templates.TemplateResponse(
         request=request,
@@ -77,7 +81,6 @@ def edit_category(
             "request": request,
             "title": "Edit Category",
             "category": category,
-            "is_edit": True,
         },
     )
 
@@ -98,5 +101,21 @@ def update_category(
 
     return RedirectResponse(
         url="/categories/",
-        status_code=303,
+        status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+
+@router.get("/{category_id}/delete")
+def delete_category(
+    category_id: int,
+    session: Session = Depends(get_session),
+):
+    CategoryService.delete(
+        session=session,
+        category_id=category_id,
+    )
+
+    return RedirectResponse(
+        url="/categories/",
+        status_code=status.HTTP_303_SEE_OTHER,
     )

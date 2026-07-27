@@ -5,7 +5,7 @@ from app.services.sequence_service import SequenceService
 
 
 class CategoryService:
-
+   
     @staticmethod
     def create(
         session: Session,
@@ -32,7 +32,7 @@ class CategoryService:
     def get_all(session: Session):
         statement = (
             select(Category)
-            .where(Category.active == True)
+            .where(Category.is_active == True)
             .order_by(Category.category_name)
         )
 
@@ -42,7 +42,7 @@ class CategoryService:
     def get_dropdown(session: Session):
         statement = (
             select(Category)
-            .where(Category.active == True)
+            .where(Category.is_active == True)
             .order_by(Category.category_name)
         )
 
@@ -63,12 +63,28 @@ class CategoryService:
         description: str,
     ):
         category = session.get(Category, category_id)
-
+  
+        if not category:
+            return None
+        
         category.category_name = category_name
         category.description = description
 
-        session.add(category)
         session.commit()
         session.refresh(category)
 
         return category
+    @staticmethod
+    def delete(
+        session: Session,
+        category_id: int,
+    ):
+        category = session.get(Category, category_id)
+
+        if not category:
+            return False
+
+        session.delete(category)
+        session.commit()
+
+        return True
